@@ -23,6 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Select Xcode version
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_16.5.app/Contents/Developer
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
