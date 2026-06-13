@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import { Component, useCallback, useEffect, useMemo, useState, type ErrorInfo, type ReactElement, type ReactNode } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -38,7 +38,42 @@ const initialConnection: EchoLinkConnection = {
   scheme: 'http',
 };
 
-export default function App(): ReactElement {
+type ErrorBoundaryState = {
+  error: Error | null;
+};
+
+class AppErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
+  state: ErrorBoundaryState = {
+    error: null,
+  };
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    console.error('ECHO iPhone startup error', error, errorInfo.componentStack);
+  }
+
+  render(): ReactNode {
+    if (!this.state.error) {
+      return this.props.children;
+    }
+
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.errorBox}>
+            <Text style={styles.errorTitle}>应用启动失败</Text>
+            <Text style={styles.errorText}>{this.state.error.message}</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
+
+function EchoLinkApp(): ReactElement {
   const [connection, setConnection] = useState<EchoLinkConnection>(initialConnection);
   const [pairingText, setPairingText] = useState('');
   const [status, setStatus] = useState<EchoLinkStatusResponse | null>(null);
@@ -279,6 +314,14 @@ export default function App(): ReactElement {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
+  );
+}
+
+export default function App(): ReactElement {
+  return (
+    <AppErrorBoundary>
+      <EchoLinkApp />
+    </AppErrorBoundary>
   );
 }
 

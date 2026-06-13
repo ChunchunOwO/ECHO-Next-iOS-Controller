@@ -95,6 +95,10 @@ if [[ -z "$SCHEME" ]]; then
   exit 1
 fi
 
+export NODE_BINARY="${NODE_BINARY:-$(command -v node)}"
+export RCT_NO_LAUNCH_PACKAGER=1
+unset SKIP_BUNDLING
+
 echo "Building unsigned iphoneos app with scheme: $SCHEME"
 xcodebuild \
   "${BUILD_TARGET_ARGS[@]}" \
@@ -114,6 +118,14 @@ if [[ -z "$APP_PATH" ]]; then
   echo "Could not find built .app output." >&2
   echo "Available Xcode products under $PRODUCTS_DIR:" >&2
   find "$PRODUCTS_DIR" -maxdepth 3 -print >&2 2>/dev/null || true
+  exit 1
+fi
+
+JS_BUNDLE_PATH="$(find "$APP_PATH" -name 'main.jsbundle' -print -quit 2>/dev/null || true)"
+if [[ -z "$JS_BUNDLE_PATH" ]]; then
+  echo "Built .app is missing main.jsbundle; the app would open to a white screen or crash in Release." >&2
+  echo "Contents near app root:" >&2
+  find "$APP_PATH" -maxdepth 2 -print >&2 2>/dev/null || true
   exit 1
 fi
 

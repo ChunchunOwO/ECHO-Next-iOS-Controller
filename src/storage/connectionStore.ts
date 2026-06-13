@@ -17,12 +17,20 @@ const isConnection = (value: unknown): value is EchoLinkConnection => {
 };
 
 export const loadSavedConnection = async (): Promise<EchoLinkConnection | null> => {
-  const raw = await AsyncStorage.getItem(storageKey);
-  if (!raw) {
+  try {
+    const raw = await AsyncStorage.getItem(storageKey);
+    if (!raw) {
+      return null;
+    }
+    const parsed = JSON.parse(raw) as unknown;
+    if (isConnection(parsed)) {
+      return parsed;
+    }
+    await AsyncStorage.removeItem(storageKey);
+    return null;
+  } catch {
     return null;
   }
-  const parsed = JSON.parse(raw) as unknown;
-  return isConnection(parsed) ? parsed : null;
 };
 
 export const saveConnection = async (connection: EchoLinkConnection): Promise<void> => {
