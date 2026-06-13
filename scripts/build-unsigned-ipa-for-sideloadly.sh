@@ -39,7 +39,6 @@ fi
 WORKSPACE="$(find ios -maxdepth 1 -name '*.xcworkspace' -print -quit)"
 PROJECT="$(find ios -maxdepth 1 -name '*.xcodeproj' -print -quit)"
 BUILD_DIR="$ROOT_DIR/build/ios-unsigned"
-ARCHIVE_ROOT="$BUILD_DIR/archive"
 PAYLOAD_DIR="$BUILD_DIR/Payload"
 IPA_PATH="$BUILD_DIR/ECHO-iPhone-unsigned.ipa"
 
@@ -50,11 +49,46 @@ if [[ -n "${WORKSPACE:-}" ]]; then
   LIST_JSON="$(xcodebuild -workspace "$WORKSPACE" -list -json)"
   BUILD_TARGET_ARGS=(-workspace "$WORKSPACE")
 else
+  if [[ -z "${PROJECT:-}" ]]; then
+    echo "Could not find an Xcode workspace or project under ios/." >&2
+    exit 1
+  fi
   LIST_JSON="$(xcodebuild -project "$PROJECT" -list -json)"
   BUILD_TARGET_ARGS=(-project "$PROJECT")
 fi
 
-SCHEME="$(node -e 'const fs=require("fs"); const data=JSON.parse(fs.readFileSync(0,"utf8")); const schemes=(data.workspace||data.project||{}).schemes||[]; console.log(schemes[0]||"")' <<< "$LIST_JSON")"
+SCHEME="$(LIST_JSON="$LIST_JSON" node <<'NODE'
+const fs = require('fs');
+
+const list = JSON.parse(process.env.LIST_JSON || '{}');
+const appConfig = JSON.parse(fs.readFileSync('app.json', 'utf8'));
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+
+const schemes = (list.workspace || list.project || {}).schemes || [];
+const preferredNames = [
+  appConfig.expo?.name,
+  appConfig.expo?.slug,
+  pkg.name,
+].filter(Boolean);
+
+const normalize = (value) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+const preferred = new Set(preferredNames.flatMap((name) => {
+  const normalized = normalize(name);
+  return [normalized, normalized.replace(/ios$/, '')].filter(Boolean);
+}));
+
+const ignored = /^(pods-|pods$)|hermes|react|rct|yoga|folly|boost|glog|fmt|asyncstorage|codegen|dependencies|expo/i;
+const usableSchemes = schemes.filter((scheme) => !ignored.test(scheme));
+const selected =
+  usableSchemes.find((scheme) => preferred.has(normalize(scheme))) ||
+  usableSchemes.find((scheme) => preferredNames.some((name) => normalize(scheme).includes(normalize(name)))) ||
+  usableSchemes[0] ||
+  schemes[0] ||
+  '';
+
+console.log(selected);
+NODE
+)"
 
 if [[ -z "$SCHEME" ]]; then
   echo "Could not detect an Xcode scheme." >&2
@@ -67,15 +101,19 @@ xcodebuild \
   -scheme "$SCHEME" \
   -configuration Release \
   -sdk iphoneos \
+  -destination 'generic/platform=iOS' \
   -derivedDataPath "$BUILD_DIR/DerivedData" \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
   build
 
-APP_PATH="$(find "$BUILD_DIR/DerivedData/Build/Products/Release-iphoneos" -maxdepth 1 -name '*.app' -print -quit)"
+PRODUCTS_DIR="$BUILD_DIR/DerivedData/Build/Products"
+APP_PATH="$(find "$PRODUCTS_DIR" -type d -name '*.app' -not -path '*/Payload/*' -print -quit 2>/dev/null || true)"
 if [[ -z "$APP_PATH" ]]; then
   echo "Could not find built .app output." >&2
+  echo "Available Xcode products under $PRODUCTS_DIR:" >&2
+  find "$PRODUCTS_DIR" -maxdepth 3 -print >&2 2>/dev/null || true
   exit 1
 fi
 
