@@ -41,6 +41,7 @@ PROJECT="$(find ios -maxdepth 1 -name '*.xcodeproj' -print -quit)"
 BUILD_DIR="$ROOT_DIR/build/ios-unsigned"
 PAYLOAD_DIR="$BUILD_DIR/Payload"
 IPA_PATH="$BUILD_DIR/ECHO-iPhone-unsigned.ipa"
+CUSTOM_ASSETS_CAR="$ROOT_DIR/Assets.car"
 
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
@@ -127,6 +128,13 @@ if [[ -z "$JS_BUNDLE_PATH" ]]; then
   echo "Contents near app root:" >&2
   find "$APP_PATH" -maxdepth 2 -print >&2 2>/dev/null || true
   exit 1
+fi
+
+if [[ -f "$CUSTOM_ASSETS_CAR" ]]; then
+  echo "Injecting custom Assets.car into app bundle for icon resources..."
+  cp "$CUSTOM_ASSETS_CAR" "$APP_PATH/Assets.car"
+else
+  echo "No custom Assets.car found at $CUSTOM_ASSETS_CAR; using Xcode-generated assets."
 fi
 
 mkdir -p "$PAYLOAD_DIR"

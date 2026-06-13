@@ -7,6 +7,7 @@ Upload these source files and folders:
 - `.gitignore`
 - `app.json`
 - `App.tsx`
+- `Assets.car`
 - `package.json`
 - `package-lock.json`
 - `README.md`
