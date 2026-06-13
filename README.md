@@ -1,11 +1,12 @@
-# ECHO iPhone
+# ECHO_IOS_Client - A Bit Perfect Hi-Fi Music Player iOS Cli
 
-This is the first iPhone-side ECHO Link client. It is intentionally built with Expo + React Native so the mobile work can reuse TypeScript knowledge instead of starting with SwiftUI. For now, it only guarantees connection with the ECHO client, other features aren't guaranteed.
+This project determined to provide a iPhone-side ECHO Link client. It is intentionally built with Expo + React Native so the mobile work can reuse TypeScript knowledge instead of starting with SwiftUI. For now, it only guarantees connection with the ECHO client, other features aren't guaranteed.
 
-
-**YOU NEED NOTICED THAT ""Echo_IOS"" IT’S NOT A OFFICIAL PROJECT**
+**YOU NEED NOTICED THAT ""ECHO_IOS_Client"" IT’S NOT A OFFICIAL PROJECT**
 
 **Here is ECHO Project >> "github/Moekotori/ECHO"**
+
+#This project is just to prove the feasibility of IPA development.#
 
 ## What Works First
 
