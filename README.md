@@ -3,6 +3,7 @@
 An experimental iOS companion app for [ECHO NEXT](https://github.com/Moekotori/ECHO). It turns an iPhone into a clean music-player style client for your PC library: browse tracks, control playback, view current status, and optionally stream PC music to the phone.
 
 > This is an unofficial community project. It is not maintained by the official ECHO project.
+> If you have any concerns regarding copyright infringement, suggestions, or questions, you can find me in the official ECHO QQ group: @白雪ユキ.
 
 ## Highlights
 
