@@ -4,7 +4,7 @@ An experimental iOS companion app for [ECHO NEXT](https://github.com/Moekotori/E
 
 > This is an unofficial community project. It is not maintained by the official ECHO project.
 
-> If you have any concerns regarding copyright infringement, suggestions, or questions, you can find me in the (official ECHO QQ group)[https://qm.qq.com/q/OdpngxJU86]: @白雪ユキ.
+> If you have any concerns regarding copyright infringement, suggestions, or questions, you can find me in the [official ECHO QQ group](https://qm.qq.com/q/OdpngxJU86): @白雪ユキ.
 
 ## Highlights
 
