@@ -13,7 +13,6 @@
   <a href="README.en.md">English</a> · <strong>中文</strong> · <a href="RELEASE_NOTES.md">Release Notes</a>
 </p>
 =======
-> If you have any concerns regarding copyright infringement, suggestions, or questions, you can find me in the [official ECHO QQ group](https://qm.qq.com/q/OdpngxJU86): @白雪ユキ.
 >>>>>>> 5dba9f355773e2c8d60c232faf2a0080f39567c6
 
 ![ECHO iPhone preview](docs/preview.svg)
