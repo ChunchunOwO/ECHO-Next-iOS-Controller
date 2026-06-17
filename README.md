@@ -5,7 +5,7 @@
 <h1 align="center">ECHO iPhone</h1>
 
 <p align="center">
-  一款为 <a href="https://github.com/Moekotori/ECHO">ECHO NEXT</a> 打造的非官方 iPhone 音乐播放器。
+  一款为 <a href="https://github.com/Moekotori/ECHO">ECHO NEXT</a> 打造的非官方 iPhone 控制器。
 </p>
 
 <p align="center">
@@ -13,12 +13,14 @@
 </p>
 
 > 这是一个非官方社区项目，不隶属于 ECHO NEXT 官方仓库。
->
+
 > 如果你有版权、建议或问题反馈，可以在 [ECHO 官方 QQ 群](https://qm.qq.com/q/OdpngxJU86) 联系 @白雪ユキ。
+
+> 这个项目是我的第一个作品 可能做的很烂 可能烂尾 本项目主要是为了证明windows可以全流程制作ios端软件(除了签名和发布) 感谢理解<3
 
 ## 这是什么
 
-ECHO iPhone 把 iPhone 变成 ECHO NEXT 桌面端的音乐播放器。它通过 EchoLink 连接电脑端，读取当前播放状态，浏览电脑本地曲库，控制播放、进度、音量、队列，并在支持的音频格式下把歌曲串流到手机播放。
+ECHO iPhone 把 iPhone 变成 ECHO NEXT 桌面端的音乐控制器/播放器。它通过 EchoLink 连接电脑端，读取当前播放状态，浏览电脑本地曲库，控制播放、进度、音量、队列，并在支持的音频格式下把歌曲串流到手机播放。
 
 这版重点重做了 UI：播放页，封面、歌词、控制区和 dock 都重新整理成统一的玻璃质感界面。歌词界面使用更大的字号、自动滚动和当前行高亮，适合把手机直接当成正在播放的歌词屏。
 
